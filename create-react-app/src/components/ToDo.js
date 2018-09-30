@@ -3,9 +3,9 @@
  class ToDo extends Component {
    render() {
      return (
-       <li>a todo will go here</li>
+       <li>{ this.props.description }</li>
      );
    }
- }
- 
+ } 
+
  export default ToDo;
