@@ -13,6 +13,7 @@ class App extends Component {
             ],
             newTodoDescription: ''
         };
+        this.deleteTodo = this.deleteTodo.bind(this);
     }
     
     handleChange(e) {
@@ -23,7 +24,7 @@ class App extends Component {
    handleSubmit(e) {
      e.preventDefault();
        if (!this.state.newTodoDescription) { return }
-       const newTodo = { description: this.state.newTodoDescription, isCompleted: false };
+       const newTodo = { id: this.state.todos.id, description: this.state.newTodoDescription, isCompleted: false };
        this.setState({ todos: [...this.state.todos, newTodo], newTodoDescription: '' }); 
    }
     
@@ -32,17 +33,24 @@ class App extends Component {
         todo.isCompleted = todo.isCompleted ? false : true;
         this.setState({ todos: todos });
     }
- 
+    
+deleteTodo(description) {
+      const remainingToDos = this.state.todos.filter((todo, remainingToDos) => {
+          return (todo.description !== remainingToDos.description)
+       });
+      this.setState({ todos: remainingToDos });
+}
+    
   render() {
     return (
       <div className="App">
         <ul>
           { this.state.todos.map( (todo, index) => 
-            <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } />
+            <ToDo key={ index.id } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(todo) } onDelete={ this.deleteTodo } />
           )}
         </ul> 
-        <form onSubmit={ (e) => this.handleSubmit(e) }>
-           <input type="text" value={ this.state.newTodoDescription onChange={ (e) => this.handleChange(e) }/>
+         <form onSubmit={ (e) => this.handleSubmit(e) }>
+           <input type="text" value={ this.state.newTodoDescription } onChange={ (e) => this.handleChange(e) } />
            <input type="submit" />
          </form>
        
